@@ -1,0 +1,248 @@
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/terminal.css@0.6.6/dist/terminal.min.css" />
+
+        <script>
+            $(function() {
+                const socket = io();
+
+                socket.on("server-data", msg => {
+                    $("#output").append($("<p>").text(msg));
+                });
+
+                socket.on("server-error", msg => {
+                    $("#output").append($("<p>").text(msg));
+                });
+
+                $("form").on("submit", function(e) {
+                    e.preventDefault();
+
+                    let auth = $("#auth").val();
+                    let username = $("#username").val();
+                    let password = $("#password").val();
+                    let coupon = $("input[type='radio']:checked").val();
+
+                    if (!coupon) {
+                        alert("fuck off, no cheating - select something you want");
+                        return null;
+                    }
+
+                    localStorage.setItem("auth", auth);
+
+                    socket.emit("generate-coupon", {
+                        auth: auth,
+                        username: username,
+                        password: password,
+                        coupon: coupon
+                    });
+                });
+
+                $("#clear").on("click", () => {
+                    $("#output").empty();
+                });
+
+                $("#auth").val(localStorage.getItem("auth"));
+            });
+        </script>
+
+        <style>
+            .container {
+                margin-top: 20px;
+            }
+
+            pre {
+                background: #000 !important;
+                color: #fff !important;
+            }
+            pre code {
+                background: #000 !important;
+                color: #fff !important;
+                overflow: hidden;
+                min-width: auto !important;
+            }
+
+            h3 {
+                margin: 0;
+            }
+
+            .btn:focus {
+                background: #000 !important;
+                color: #fff !important;
+            }
+
+            .submit {
+                padding: 1em 2.5em;
+                font-size: 1.5em;
+                display: block;
+                margin: 0 auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div>
+                <pre>
+                    <code>
+ _____ _          _ _
+ / ____| |        | | |
+| (___ | |__   ___| | |___  ___  ___       _ ____      __
+ \___ \| '_ \ / _ \ | / __|/ _ \/ __|     | '_ \ \ /\ / /
+ ____) | | | |  __/ | \__ \  __/ (__   _  | |_) \ V  V /
+|_____/|_| |_|\___|_|_|___/\___|\___| (_) | .__/ \_/\_/
+                                          | |
+                                          |_|
+
+
+This is a tool that generates McDonald's coupons on
+your McDonald's account.
+
+Each auth key has <u>10</u> tries each day. An auth key
+can be generated for free by either Ash or Cronick.
+
+If you press the submit button, an attempt will
+be made, even if your coupon wasn't added (eg. bad login).
+
+We do not store your username or password,
+but feel free to create a new account
+with a completely random email and password.
+
+Proven once again, that McDonald's does not
+know how to secure their shit. Get rekt, noobs.
+
+- By Cronick and Ash
+                </code>
+            </pre>
+            </div>
+            <form>
+                <fieldset>
+                    <legend>McDonald's Coupon Generator</legend>
+                    <div class="form-group">
+                        <label for="text">Auth code:</label>
+                        <input id="auth" type="text" required placeholder="fd7088d4-bce2-457b-bbba-27d021309815" />
+                    </div>
+                    <div class="form-group">
+                        <label for="text">Username (email):</label>
+                        <input id="username" type="email" required placeholder="ash@shellsec.pw" />
+                    </div>
+                    <div class="form-group">
+                        <label for="pw">Password:</label>
+                        <input type="password" required id="password" placeholder="••••••••" />
+                    </div>
+                    <div class="form-group">
+                        <label for="0">Gratis cheeseburger:</label>
+                        <input name="coupon" value="0" type="radio" checked />
+                    </div>
+                    <div class="form-group">
+                        <label for="1">Gratis hamburger:</label>
+                        <input name="coupon" value="1" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="2">Gratis mellem sodavand:</label>
+                        <input name="coupon" value="2" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="3">Gratis stor sodavand:</label>
+                        <input name="coupon" value="3" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="4">Gratis mellem pommes fritter:</label>
+                        <input name="coupon" value="4" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="5">Gratis pose Chili Cheese Tops (3 stk.):</label>
+                        <input name="coupon" value="5" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="6">Cheeseburger 5 kr.:</label>
+                        <input name="coupon" value="6" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="7">Hamburger 5 kr.:</label>
+                        <input name="coupon" value="7" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="8">Chili Cheese Tops 5 kr. (3 stk.):</label>
+                        <input name="coupon" value="8" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="9">McFlurry 15 kr.:</label>
+                        <input name="coupon" value="9" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="10">Stor sodavand 10 kr.:</label>
+                        <input name="coupon" value="10" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="11">Chicken McNuggets 15 kr. (6 stk.):</label>
+                        <input name="coupon" value="11" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="12">Chili Cheese Tops 15 kr. (7 stk.):</label>
+                        <input name="coupon" value="12" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="13">Veggie Junior 10 kr.:</label>
+                        <input name="coupon" value="13" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="24">Big Mac 15 kr.</label>
+                        <input name="coupon" value="24" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="14">2 for 1 mellem Pommes Frites:</label>
+                        <input name="coupon" value="14" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="15">2 for 1 stor Pommes Frites:</label>
+                        <input name="coupon" value="15" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="16">2 for 1 mellem sodavand:</label>
+                        <input name="coupon" value="16" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="17">2 for 1 mellem Milkshake:</label>
+                        <input name="coupon" value="17" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="18">Køb en mellem sodavand og få en gratis Cheeseburger:</label>
+                        <input name="coupon" value="18" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="19">Køb en mellem sodavand og få en gratis Hamburger:</label>
+                        <input name="coupon" value="19" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="20">Køb en mellem sodavand og få en gratis pose Chili Cheese Tops (3 stk.):</label>
+                        <input name="coupon" value="20" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="21">Køb en mellem sodavand og få 6 stk. gratis Chicken McNuggets:</label>
+                        <input name="coupon" value="21" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="22">Køb en mellem sodavand og få en gratis pose Chili Cheese Tops (7 stk.):</label>
+                        <input name="coupon" value="22" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <label for="23">Køb en mellem sodavand og få en gratis Veggie Junior:</label>
+                        <input name="coupon" value="23" type="radio" />
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-default submit" type="submit" role="button">Submit</button>
+                    </div>
+                </fieldset>
+            </form>
+            <div>
+                <pre>
+                    <h3>Output from server:</h3>
+                    <code class="hljs css" id="output"></code>
+                </pre>
+                <button id="clear" class="btn btn-default">Clear output</button>
+            </div>
+        </div>
+    </body>
+</html>
+
